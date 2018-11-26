@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import _ from 'lodash';
 import { Text, View, TouchableHighlight } from 'react-native';
 import { Icon } from 'react-native-elements';
 
@@ -10,6 +11,25 @@ class ClassViewHourItem extends Component {
 
     if (content) this.setState({ content: false });
     else this.setState({ content: true });
+  }
+
+  renderStudents() {
+    const students = _.map(this.props.hour.students, (val, uid) => {
+      return { ...val, uid };
+    });
+
+    if (this.state.content) {
+      return students.map((item, index) =>
+        <View key={index} style={styles.studentsContentStyle}>
+          <View style={{ paddingLeft: 10 }}>
+            <Text>{item.name}</Text>
+          </View>
+          <View style={{ paddingRight: 20 }}>
+            <Text>{item.attendance}654654</Text>
+          </View>
+        </View>
+      );
+    }
   }
 
   renderIcon() {
@@ -32,9 +52,10 @@ class ClassViewHourItem extends Component {
   }
 
   render() {
-    const { students_limit, uid } = this.props.hour;
+    const { students_limit, uid, students_total } = this.props.hour;
 
     return (
+      <View>
         <TouchableHighlight style={{ height: 60 }} onPress={this.onRowPress.bind(this)}>
           <View style={styles.containerStyle}>
             <View style={{ flex: 1, justifyContent: 'center' }}>
@@ -46,14 +67,15 @@ class ClassViewHourItem extends Component {
               {this.renderIcon()}
             </View>
             <View style={styles.numberContainerStyle}>
-              <Text>0</Text>
+              <Text>{students_total}</Text>
               <Text style={styles.titleStyle}>
                 {'/' + students_limit}
               </Text>
             </View>
           </View>
         </TouchableHighlight>
-
+        {this.renderStudents()}
+      </View>
     );
   }
 }
@@ -67,9 +89,6 @@ const styles = {
     padding: 5,
     backgroundColor: '#fff'
   },
-  columnStyle: {
-    alignItems: 'center',
-  },
   titleStyle: {
     color: '#ccc',
   },
@@ -78,6 +97,13 @@ const styles = {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  studentsContentStyle: {
+    flexDirection: 'row',
+    height: 50,
+    backgroundColor: '#eee',
+    alignItems: 'center',
+    justifyContent: 'space-between'
   }
 };
 

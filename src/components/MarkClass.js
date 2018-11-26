@@ -55,10 +55,12 @@ class MarkClass extends Component {
           for (let i = morningInitialHour; i < morningFinalHour; i++) {
             hoursAvailable[i + ':00'] = {};
             hoursAvailable[i + ':00'].students_limit = 15;
+            hoursAvailable[i + ':00'].students_total = 0;
           }
           for (let i = eveningInitialHour; i < eveningFinalHour; i++) {
             hoursAvailable[i + ':00'] = {};
             hoursAvailable[i + ':00'].students_limit = 15;
+            hoursAvailable[i + ':00'].students_total = 0;
           }
           this.props.markClass(date, hoursAvailable);
         }}

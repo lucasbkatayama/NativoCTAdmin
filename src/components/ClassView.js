@@ -29,18 +29,19 @@ class ClassView extends Component {
     const { hours } = this.props.classes;
     return (
       <ScrollView style={styles.containerStyle}>
+
         <View style={styles.containerTopStyle}>
           <Text style={{ fontSize: 18 }}>
             {this.dateFormat()}
           </Text>
         </View>
+        
         <View style={{ flexDirection: 'row' }}>
           <TableDivision title='Horário' style={{ flex: 1, alignItems: 'flex-start' }} />
           <TableDivision title='Nº Alunos' flex={1} style={{ alignItems: 'flex-end' }} />
         </View>
-        <View style={styles.containerMiddleStyle}>
-          {this.renderHours(hours)}
-        </View>
+        {this.renderHours(hours)}
+
       </ScrollView>
     );
   }
