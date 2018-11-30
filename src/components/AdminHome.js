@@ -25,6 +25,7 @@ class AdminHome extends Component {
             title='Financeiro'
             icon={{ name: 'attach-money', type: 'material-icons' }}
             rounded
+            onPress={() => Actions.financial()}
             buttonStyle={{ elevation: 2 }}
           />
 
@@ -56,7 +57,7 @@ class AdminHome extends Component {
 const styles = {
   containerStyle: {
     justifyContent: 'space-around',
-    height: 180,
+    height: 200,
     elevation: 5
   }
 };

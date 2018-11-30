@@ -40,19 +40,20 @@ class StudentForm extends Component {
       plan,
       family_plan,
       contributors,
-      parcel
+      parcel,
+      parcel_number
     } = this.props;
     const { sponsorNumber } = this.state;
     if (contributors[0] != null) {
       const contributor = contributors[sponsorNumber];
 
       this.props.studentCreate({
-        s_email, s_password, name, phone, days, plan, family_plan, contributor, parcel
+        s_email, s_password, name, phone, days, plan, family_plan, contributor, parcel, parcel_number
       });
       Keyboard.dismiss();
     }
     this.props.studentCreate({
-      s_email, s_password, name, phone, days, plan, family_plan, parcel
+      s_email, s_password, name, phone, days, plan, family_plan, parcel, parcel_number
     });
     Keyboard.dismiss();
   }
@@ -116,6 +117,41 @@ renderParcelPicker() {
           >
             <Picker.Item label="A Vista" value={false} />
             <Picker.Item label="A Prazo" value />
+          </Picker>
+        </View>
+    );
+  } return <View />;
+}
+
+renderParcelNumberPicker() {
+  if (this.props.parcel && this.props.plan === 'Semestral') {
+    return (
+      <View>
+        <FormLabel>Numero de Parcelas:</FormLabel>
+          <Picker
+            style={{ marginLeft: 20, flex: 1 }}
+            selectedValue={this.props.parcel_number}
+            onValueChange={value => this.props.formChanged({ prop: 'parcel_number', value })}
+          >
+            <Picker.Item label="2" value={2} />
+            <Picker.Item label="3" value={3} />
+          </Picker>
+        </View>
+    );
+  } else if (this.props.parcel && this.props.plan === 'Anual') {
+    return (
+      <View>
+        <FormLabel>Numero de Parcelas:</FormLabel>
+          <Picker
+            style={{ marginLeft: 20, flex: 1 }}
+            selectedValue={this.props.parcel_number}
+            onValueChange={value => this.props.formChanged({ prop: 'parcel_number', value })}
+          >
+            <Picker.Item label="2" value={2} />
+            <Picker.Item label="3" value={3} />
+            <Picker.Item label="4" value={4} />
+            <Picker.Item label="5" value={5} />
+            <Picker.Item label="6" value={6} />
           </Picker>
         </View>
     );
@@ -221,6 +257,7 @@ renderParcelPicker() {
             </Picker>
           {this.renderPickers()}
           {this.renderParcelPicker()}
+          {this.renderParcelNumberPicker()}
           {this.renderError()}
           {this.renderButton()}
 
@@ -304,7 +341,8 @@ const mapStateToProps = state => {
     family_plan: state.student.family_plan,
     sponsor: state.student.sponsor,
     contributors,
-    parcel: state.student.parcel
+    parcel: state.student.parcel,
+    parcel_number: state.student.parcel_number
   };
 };
 

@@ -10,10 +10,16 @@ import {
 } from './types';
 
 export const studentCreate =
-({ s_email, s_password, name, phone, days, plan, family_plan, contributor, parcel }) => {
+({ s_email, s_password, name, phone, days, plan, family_plan, contributor, parcel, parcel_number }) => {
   let payPlan = plan;
   let sponsor = '';
   const availableDays = days * 4;
+
+  const today = new Date();
+  let year = today.getFullYear();
+  let month = today.getMonth();
+  const day = today.getDate();
+  let bills = {};
 
   if (family_plan === 'beneficiario' && contributor != null) {
     payPlan = contributor.plan;
@@ -24,8 +30,63 @@ export const studentCreate =
     dispatch({ type: LOADING });
 
     firebase.auth().signOut();
+
     firebase.auth().createUserWithEmailAndPassword(s_email, s_password)
       .then((user) => {
+        // Após criar usuário, é cadastrado os pagamentos de seu plano
+        firebase.database().ref(`/payments/values/${payPlan}/${days}`)
+          .on('value', snapshot => {
+          if (parcel) {
+            for (let i = 1; i <= parcel_number; i++) {
+              if (month + i === 12 && day < 10) {
+                month = 0;
+                year++;
+              } else month++;
+              const expiration_date = new Date(year, month, 10).getTime();
+              bills[expiration_date] = {
+                value: snapshot.val().normal / parcel_number,
+                pay_date: '',
+                status: 'Em aberto',
+              };
+              firebase.database().ref('/payments/bills').push({
+                expiration_date,
+                value: snapshot.val().normal / parcel_number,
+                pay_date: '',
+                status: 'Em aberto',
+                name,
+                parcel_number: i,
+                id: user.user.uid,
+                payed: false,
+                payPlan,
+                days,
+              });
+              console.log('Entrou no for');
+            }
+          } else {
+              if (month + 1 === 12 && day < 10) {
+                month = 0;
+                year++;
+              } else month++;
+              const expiration_date = new Date(year, month, 10).getTime();
+              bills[expiration_date] = {
+                value: snapshot.val().normal,
+                pay_date: '',
+                status: 'Em aberto',
+                name,
+              };
+              firebase.database().ref('/payments/bills').push({
+                expiration_date,
+                value: snapshot.val().normal,
+                pay_date: '',
+                status: 'Em aberto',
+                name,
+                id: user.user.uid,
+                payed: false,
+                payPlan,
+                days,
+              });
+            }
+          // Dados do usuário armazenados no banco
           firebase.database().ref(`/users/${user.user.uid}`)
           .set({
             s_email,
@@ -38,7 +99,8 @@ export const studentCreate =
             parcel,
             family_plan,
             sponsor,
-            date: (Date.now())
+            date: (Date.now()),
+            bills
           })
           .then(() => {
             if (family_plan === 'contribuinte') {
@@ -60,7 +122,8 @@ export const studentCreate =
             }
             dispatch({ type: STUDENT_CREATE });
           });
-        }).catch(() => dispatch({ type: CREATE_FAIL }));
+        });
+      }).catch(() => dispatch({ type: CREATE_FAIL }));
   };
 };
 
@@ -92,6 +155,15 @@ export const studentsFetch = () => {
     firebase.database().ref('/users')
     .on('value', snapshot => {
       dispatch({ type: STUDENTS_FETCH_SUCCESS, payload: snapshot.val() });
+    });
+  };
+};
+
+export const billsFetch = () => {
+  return (dispatch) => {
+    firebase.database().ref('/payments/bills')
+    .on('value', snapshot => {
+      dispatch({ type: FORM_CHANGED, payload: { prop: 'bills', value: snapshot.val() } });
     });
   };
 };

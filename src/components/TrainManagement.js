@@ -31,7 +31,7 @@ class StudentManagement extends Component {
           />
           <Button
             fontWeight='600'
-            title='Consultar Aulas Anteriores'
+            title='Consultar Treinos Anteriores'
             rounded
             backgroundColor='#007aff'
             icon={{ name: 'search', type: 'font-awesome' }}
@@ -41,7 +41,7 @@ class StudentManagement extends Component {
         </View>
 
         <View style={{ flexDirection: 'row' }}>
-          <TableDivision title='Data' />
+          <TableDivision title='Próximos Treinos' />
         </View>
 
         <FlatList

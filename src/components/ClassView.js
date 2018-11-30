@@ -21,7 +21,7 @@ class ClassView extends Component {
       return { ...val, uid };
     });
     return hour.map((item, index) =>
-       <ClassViewHourItem hour={item} key={index} />
+       <ClassViewHourItem date={this.props.classes.uid} hour={item} key={index} />
     );
   }
 
@@ -35,7 +35,7 @@ class ClassView extends Component {
             {this.dateFormat()}
           </Text>
         </View>
-        
+
         <View style={{ flexDirection: 'row' }}>
           <TableDivision title='Horário' style={{ flex: 1, alignItems: 'flex-start' }} />
           <TableDivision title='Nº Alunos' flex={1} style={{ alignItems: 'flex-end' }} />

@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
+import firebase from 'firebase';
 import _ from 'lodash';
-import { Text, View, TouchableHighlight } from 'react-native';
+import {
+  Text,
+  View,
+  TouchableHighlight,
+  CheckBox
+} from 'react-native';
 import { Icon } from 'react-native-elements';
 
 class ClassViewHourItem extends Component {
@@ -11,6 +17,16 @@ class ClassViewHourItem extends Component {
 
     if (content) this.setState({ content: false });
     else this.setState({ content: true });
+  }
+
+  markAttendance(uid) {
+    const hour = this.props.hour.uid;
+    const { date } = this.props;
+
+    firebase.database().ref(`/classes/${date}/hours/${hour}/students/${uid}/`)
+    .update({
+      attendance: true
+    });
   }
 
   renderStudents() {
@@ -24,8 +40,12 @@ class ClassViewHourItem extends Component {
           <View style={{ paddingLeft: 10 }}>
             <Text>{item.name}</Text>
           </View>
-          <View style={{ paddingRight: 20 }}>
-            <Text>{item.attendance}654654</Text>
+          <View style={{ paddingRight: 20, flexDirection: 'row', alignItems: 'center' }}>
+            <Text>Presença</Text>
+            <CheckBox
+              value={item.attendance}
+              onChange={() => this.markAttendance(item.uid)}
+            />
           </View>
         </View>
       );
@@ -101,9 +121,10 @@ const styles = {
   studentsContentStyle: {
     flexDirection: 'row',
     height: 50,
-    backgroundColor: '#eee',
+    backgroundColor: 'rgba(0,0,0,0)',
+    borderBottomWidth: 1,
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   }
 };
 

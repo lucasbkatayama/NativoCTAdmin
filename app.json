@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "teste1",
-    "description": "This project is really great.",
-    "slug": "teste1",
+    "name": "NativoCT",
+    "description": "Aplicativo para gerenciamento de academia funcional.",
+    "slug": "nativoct",
     "privacy": "public",
     "sdkVersion": "31.0.0",
     "platforms": ["ios", "android"],

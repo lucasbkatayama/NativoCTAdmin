@@ -8,6 +8,7 @@ import TrainManagement from './components/TrainManagement';
 import MarkClass from './components/MarkClass';
 import ClassView from './components/ClassView';
 import ClassConsult from './components/ClassConsult';
+import FinancialManagement from './components/FinancialManagement';
 
 const RouterAdmin = () => {
   return (
@@ -27,6 +28,7 @@ const RouterAdmin = () => {
         <Scene key="classConsult" component={ClassConsult} title="Consultar Treinos" />
         <Scene key="markClass" component={MarkClass} title="Cadastrar Aula" />
         <Scene key="classView" component={ClassView} title="Aula" />
+        <Scene key="financial" component={FinancialManagement} title="Financeiro" />
       </Scene>
     </Router>
   );

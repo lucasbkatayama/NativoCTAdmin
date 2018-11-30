@@ -21,7 +21,9 @@ const INITIAL_STATE = {
   contributors: {},
   plan: 'Mensal',
   family_plan: 'no',
-  parcel: false
+  parcel: false,
+  parcel_number: 2,
+  bills: {}
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -39,7 +41,8 @@ export default (state = INITIAL_STATE, action) => {
         days: 2,
         plan: 'Mensal',
         family_plan: 'no',
-        parcel: false
+        parcel: false,
+        parcel_number: 2
       };
     case STUDENTS_FETCH_SUCCESS:
       return { ...state, users: action.payload };
